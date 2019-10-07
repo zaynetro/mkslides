@@ -1,0 +1,28 @@
+* About mkslides
+  :PROPERTIES:
+  :AUTHOR:    Roman Zaynetdinov
+  :END:
+
+** Intro
+
+   TODO: explain what mkslides are about
+
+** Markup
+
+   Supported markup:
+
+   # Leave comments (e.g for TODOs)
+
+   1. You can use *basic* formatting /rules/.
+   2. [[https://github.com/zaynetro][Link to repo]]
+   3. _Command_: ~git clone https://github.com/zaynetro~
+
+** Code
+
+   You can insert code snippets as well.
+
+   #+BEGIN_SRC rust
+fn main() {
+    println!("Hello, world!");
+}
+   #+END_SRC
