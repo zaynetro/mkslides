@@ -5,7 +5,14 @@
 
 ** Intro
 
-   TODO: explain what mkslides are about
+   ~mkslides~ is a simple command for generating HTML slides from org files.
+
+   | Feature                  | Status  |
+   |--------------------------+---------|
+   | Basic formatting         | *Done*  |
+   | Enable code highlighting | *Done*  |
+   | Skip slide titles        | Planned |
+   | Embed images             | Planned |
 
 ** Markup
 
@@ -23,6 +30,7 @@
 
    #+BEGIN_SRC rust
 fn main() {
-    println!("Hello, world!");
+    let name = "James";
+    println!("Hello, {}!", name);
 }
    #+END_SRC

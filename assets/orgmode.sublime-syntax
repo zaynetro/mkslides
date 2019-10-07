@@ -1,0 +1,11 @@
+%YAML 1.2
+---
+name: orgmode
+file_extensions: [org]
+scope: source.org
+
+contexts:
+  main:
+    - match: \b(if|else|for|while|TODO)\b
+      scope: markup.bold
+      # scope: markup.italic
