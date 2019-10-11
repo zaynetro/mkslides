@@ -1,6 +1,6 @@
 * mkslides
 
-   ~mkslides~ is a simple command for generating HTML slides from org files.
+   ~mkslides~ is a simple command for generating HTML slides from [[https://orgmode.org/][org]] files.
 
    Example of generated presentation: [[https://zaynetro.github.io/mkslides/about.html][about.html]]
 
