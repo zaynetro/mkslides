@@ -1,7 +1,7 @@
-use std::io::Write;
 use std::io::Error as IOError;
+use std::io::Write;
 
-use orgize::export::{DefaultHtmlHandler, SyntectHtmlHandler, HtmlHandler};
+use orgize::export::{DefaultHtmlHandler, HtmlHandler, SyntectHtmlHandler};
 use orgize::Element;
 
 // const THEME: &'static str = "base16-ocean.light";
@@ -34,6 +34,16 @@ impl HtmlHandler<IOError> for SlidesHtmlHandler {
             Element::Title(title) if title.level == 1 => {
                 // Intro slide
                 write!(w, r#"<div class="slide intro" id="intro">"#,)?;
+            }
+            Element::Title(title) if title.level == 2 => {
+                if let Some(layout) = title.properties.get("SLIDE_LAYOUT") {
+                    if layout == "no-title" {
+                        // Hide title and skip default implementation
+                        return write!(w, r#"<h2 class="hidden">"#);
+                    } else {
+                        eprintln!("Unsupported slide layout: '{}'", layout);
+                    }
+                }
             }
             Element::Headline { level } if *level == 2 => {
                 // New slide

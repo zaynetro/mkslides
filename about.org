@@ -7,12 +7,12 @@
 
    ~mkslides~ is a simple command for generating HTML slides from org files.
 
-   | Feature                  | Status  |
-   |--------------------------+---------|
-   | Basic formatting         | *Done*  |
-   | Enable code highlighting | *Done*  |
-   | Skip slide titles        | Planned |
-   | Embed images             | Planned |
+   | Feature                  | Status    |
+   |--------------------------+-----------|
+   | Basic formatting         | *Done*    |
+   | Enable code highlighting | *Done*    |
+   | Skip slide titles        | *Done*    |
+   | Embed images             | /Planned/ |
 
 ** Markup
 
@@ -34,3 +34,21 @@ fn main() {
     println!("Hello, {}!", name);
 }
    #+END_SRC
+
+** Empty title
+   :PROPERTIES:
+   :SLIDE_LAYOUT: no-title
+   :END:
+
+   Slides without a title are possible.
+
+   #+begin_quote
+   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed luctus enim ac purus ultrices bibendum. Curabitur et elit sit amet est dictum ornare nec sed metus. Nulla porttitor feugiat dictum. Mauris hendrerit ex et gravida vestibulum. Donec pulvinar diam vitae metus laoreet, tempus laoreet ligula tempus. Nullam vitae neque vitae nibh aliquet aliquam in sed massa. Vestibulum laoreet metus eros, non porta arcu ornare sed.
+   #+end_quote
+
+** Empty slide
+   :PROPERTIES:
+   :SLIDE_LAYOUT: no-title
+   :END:
+
+   # This slide will be completely empty

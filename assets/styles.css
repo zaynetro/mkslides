@@ -2,9 +2,12 @@
     box-sizing: border-box;
 }
 
+html {
+    font-size: 40px;
+}
+
 body {
     margin: 0;
-    font-size: 2rem;
     font-weight: 300;
     line-height: 1.4;
     font-family: Calibri, "Open Sans", Helvetica, sans-serif;
@@ -14,9 +17,6 @@ body {
 .slide {
     border-bottom: 2px solid #ddd;
     height: 100vh;
-}
-
-.slide > section {
     padding: 1rem 2rem;
 }
 
@@ -45,7 +45,11 @@ h3 {
 h1,
 h2,
 h3 {
-    padding: 2rem 2rem 0.5rem;
+    padding: 1rem 0 0.5rem;
+}
+
+h2.hidden {
+    display: none;
 }
 
 .secondary {
@@ -80,4 +84,23 @@ table th {
 pre.src {
     white-space: pre-wrap;
     background-color: #fdf6e3; /* Solarized (light) */
+}
+
+li > p {
+    margin: 0;
+}
+
+li {
+    margin: 0.4rem 0;
+}
+
+blockquote {
+    border-left: 10px solid #ccc;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: #f9f9f9;
+}
+
+blockquote > p {
+    margin: 0;
 }
