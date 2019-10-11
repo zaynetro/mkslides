@@ -4,7 +4,8 @@ use std::io::Error as IOError;
 use orgize::export::{DefaultHtmlHandler, SyntectHtmlHandler, HtmlHandler};
 use orgize::Element;
 
-use crate::SlidesError;
+// const THEME: &'static str = "base16-ocean.light";
+const THEME: &'static str = "Solarized (light)";
 
 pub struct SlidesHtmlHandler {
     inner: SyntectHtmlHandler<IOError, DefaultHtmlHandler>,
@@ -12,18 +13,23 @@ pub struct SlidesHtmlHandler {
     current_table_row: u32,
 }
 
-impl SlidesHtmlHandler {
-    pub fn new() -> Self {
+impl Default for SlidesHtmlHandler {
+    fn default() -> Self {
+        let inner = SyntectHtmlHandler {
+            theme: THEME.to_string(),
+            ..SyntectHtmlHandler::default()
+        };
+
         SlidesHtmlHandler {
-            inner: SyntectHtmlHandler::default(),
+            inner,
             current_slide: 0,
             current_table_row: 0,
         }
     }
 }
 
-impl HtmlHandler<SlidesError> for SlidesHtmlHandler {
-    fn start<W: Write>(&mut self, mut w: W, element: &Element<'_>) -> Result<(), SlidesError> {
+impl HtmlHandler<IOError> for SlidesHtmlHandler {
+    fn start<W: Write>(&mut self, mut w: W, element: &Element<'_>) -> Result<(), IOError> {
         match element {
             Element::Title(title) if title.level == 1 => {
                 // Intro slide
@@ -65,7 +71,7 @@ impl HtmlHandler<SlidesError> for SlidesHtmlHandler {
         Ok(())
     }
 
-    fn end<W: Write>(&mut self, mut w: W, element: &Element<'_>) -> Result<(), SlidesError> {
+    fn end<W: Write>(&mut self, mut w: W, element: &Element<'_>) -> Result<(), IOError> {
         match element {
             Element::Title(title) if title.level == 1 => {
                 // Intro slide ended

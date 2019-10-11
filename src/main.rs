@@ -3,21 +3,18 @@
 
 // TODO: embed images
 // TODO: allow skipping slide titles
-// TODO: enable code highlighting
 
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
-use std::convert::From;
-use std::io::Error as IOError;
-use std::string::FromUtf8Error;
-
 use orgize::Org;
 
 mod handler;
+mod error;
 
 use handler::SlidesHtmlHandler;
+use error::SlidesError;
 
 const STYLES: &'static str = include_str!("../assets/styles.css");
 const SCRIPT: &'static str = include_str!("../assets/script.js");
@@ -35,7 +32,7 @@ fn main() -> Result<(), SlidesError> {
     buf_reader.read_to_string(&mut contents)?;
 
     let mut writer = Vec::new();
-    let mut handler = SlidesHtmlHandler::new();
+    let mut handler = SlidesHtmlHandler::default();
     let org = Org::parse(&contents);
     org.html_with_handler(&mut writer, &mut handler)?;
 
@@ -67,23 +64,4 @@ fn main() -> Result<(), SlidesError> {
     );
 
     Ok(())
-}
-
-#[derive(Debug)]
-enum SlidesError {
-    Args(&'static str),
-    IO(IOError),
-    Utf8(FromUtf8Error),
-}
-
-impl From<IOError> for SlidesError {
-    fn from(err: IOError) -> Self {
-        SlidesError::IO(err)
-    }
-}
-
-impl From<FromUtf8Error> for SlidesError {
-    fn from(err: FromUtf8Error) -> Self {
-        SlidesError::Utf8(err)
-    }
 }
