@@ -1,20 +1,17 @@
 // TODO: open questions
 // * How can we add presentation notes?
 
-// TODO: embed images
-// TODO: allow skipping slide titles
-
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
 
 use orgize::Org;
 
-mod handler;
 mod error;
+mod handler;
 
-use handler::SlidesHtmlHandler;
 use error::SlidesError;
+use handler::SlidesHtmlHandler;
 
 const STYLES: &'static str = include_str!("../assets/styles.css");
 const SCRIPT: &'static str = include_str!("../assets/script.js");

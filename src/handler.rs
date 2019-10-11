@@ -1,5 +1,8 @@
+use std::fs::File;
+use std::io::prelude::*;
 use std::io::Error as IOError;
 use std::io::Write;
+use std::path::Path;
 
 use orgize::export::{DefaultHtmlHandler, HtmlHandler, SyntectHtmlHandler};
 use orgize::Element;
@@ -73,12 +76,58 @@ impl HtmlHandler<IOError> for SlidesHtmlHandler {
                     write!(w, "<td>")?;
                 }
             }
+            Element::Link(link) => {
+                let path = Path::new(&*link.path);
+                if let Some(ext) = path.extension() {
+                    if ext == "png" || ext == "jpg" || ext == "jpeg" || ext == "gif" {
+                        // Read image and encode to base64
+                        let mut image = match File::open(path) {
+                            Ok(image) => image,
+                            Err(err) => {
+                                // Fallback to default handler if failed
+                                eprintln!(
+                                    "Failed to open file '{}' with error '{}'",
+                                    path.display(),
+                                    err
+                                );
+                                return self.inner.start(w, element);
+                            }
+                        };
+                        let mut contents = vec![];
+                        image.read_to_end(&mut contents)?;
+
+                        let encoded = base64::encode(&contents);
+                        let content_type = if ext == "png" {
+                            "image/png"
+                        } else if ext == "gif" {
+                            "image/gif"
+                        } else {
+                            "image/jpeg"
+                        };
+
+                        return write!(
+                            w,
+                            r#"<img src="data:{};base64, {}" alt="{}" />"#,
+                            content_type,
+                            encoded,
+                            path.display()
+                        );
+                    }
+                }
+            }
+            Element::Keyword(keyword) => {
+                write!(
+                    w,
+                    r#"<div class="keyword"><label>{}:</label> <span>{}</span></div>"#,
+                    keyword.key.to_lowercase(),
+                    keyword.value
+                )?;
+            }
             _ => {}
         }
 
         // fallthrough to default handler
-        self.inner.start(w, element)?;
-        Ok(())
+        self.inner.start(w, element)
     }
 
     fn end<W: Write>(&mut self, mut w: W, element: &Element<'_>) -> Result<(), IOError> {

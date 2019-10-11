@@ -1,2 +1,5 @@
 /target
 **/*.rs.bk
+
+# Generated presentation
+about/about.html

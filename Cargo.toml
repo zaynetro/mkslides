@@ -8,3 +8,4 @@ edition = "2018"
 
 [dependencies]
 orgize = { version = "0.5", features = ["syntect"] }
+base64 = "0.10"
