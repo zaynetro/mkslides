@@ -2,7 +2,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::io::Error as IOError;
 use std::io::Write;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use orgize::export::{DefaultHtmlHandler, HtmlHandler, SyntectHtmlHandler};
 use orgize::Element;
@@ -14,10 +14,11 @@ pub struct SlidesHtmlHandler {
     inner: SyntectHtmlHandler<IOError, DefaultHtmlHandler>,
     current_slide: u32,
     current_table_row: u32,
+    presentation_path: PathBuf,
 }
 
-impl Default for SlidesHtmlHandler {
-    fn default() -> Self {
+impl SlidesHtmlHandler {
+    pub fn new(presentation_path: &Path) -> Self {
         let inner = SyntectHtmlHandler {
             theme: THEME.to_string(),
             ..SyntectHtmlHandler::default()
@@ -27,7 +28,14 @@ impl Default for SlidesHtmlHandler {
             inner,
             current_slide: 0,
             current_table_row: 0,
+            presentation_path: presentation_path.to_path_buf(),
         }
+    }
+}
+
+impl Default for SlidesHtmlHandler {
+    fn default() -> Self {
+        Self::new(&Path::new(""))
     }
 }
 
@@ -77,11 +85,15 @@ impl HtmlHandler<IOError> for SlidesHtmlHandler {
                 }
             }
             Element::Link(link) => {
-                let path = Path::new(&*link.path);
+                let path = match self.presentation_path.parent() {
+                    Some(parent) => parent.join(&*link.path),
+                    None => Path::new(&*link.path).to_path_buf(),
+                };
+
                 if let Some(ext) = path.extension() {
                     if ext == "png" || ext == "jpg" || ext == "jpeg" || ext == "gif" {
                         // Read image and encode to base64
-                        let mut image = match File::open(path) {
+                        let mut image = match File::open(&path) {
                             Ok(image) => image,
                             Err(err) => {
                                 // Fallback to default handler if failed

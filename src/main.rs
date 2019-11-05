@@ -4,6 +4,7 @@
 use std::fs::File;
 use std::io::prelude::*;
 use std::io::BufReader;
+use std::path::Path;
 
 use orgize::Org;
 
@@ -23,13 +24,14 @@ fn main() -> Result<(), SlidesError> {
         return Err(SlidesError::Args("Please pass a file to render"));
     }
 
-    let file = File::open(&args[1])?;
+    let file_path = Path::new(&args[1]);
+    let file = File::open(&file_path)?;
     let mut buf_reader = BufReader::new(file);
     let mut contents = String::new();
     buf_reader.read_to_string(&mut contents)?;
 
     let mut writer = Vec::new();
-    let mut handler = SlidesHtmlHandler::default();
+    let mut handler = SlidesHtmlHandler::new(&file_path);
     let org = Org::parse(&contents);
     org.html_with_handler(&mut writer, &mut handler)?;
 
